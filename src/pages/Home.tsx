@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useState } from "react";
 
-type Props = {}
+// importing components
+import Title from "../components/Title";
+import SearchBar from "../components/SearchBar";
+
+type Props = {};
 
 const Home = (props: Props) => {
-  return (
-    <div>Home</div>
-  )
-}
+  const [searchText, setSearchText] = useState<string>("");
 
-export default Home
+  console.log(searchText);
+
+  return (
+    <section className="">
+      <Title title="products" />
+      <div className="flex justify-between items-center">
+        <SearchBar searchText={searchText} setSearchText={setSearchText} />
+      </div>
+    </section>
+  );
+};
+
+export default Home;
