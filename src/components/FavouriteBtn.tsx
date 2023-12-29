@@ -1,7 +1,7 @@
 import React from "react";
 
 // imporitng icons
-import { StarFilledIcon, StartOutlineIcon } from "./icons";
+import { StarFilledIcon, StarOutlineIcon } from "./icons";
 
 interface FavouritesBtnProps {
   showFavourites: boolean;
@@ -16,7 +16,11 @@ const FavouriteBtn = (props: FavouritesBtnProps) => {
       className="border border-blue rounded-lg aspect-square flex items-center justify-center h-full"
       onClick={() => setShowFavourites((prev) => !prev)}
     >
-      {showFavourites ? <StarFilledIcon /> : <StartOutlineIcon />}
+      {showFavourites ? (
+        <StarFilledIcon classes="w-5 h-5" />
+      ) : (
+        <StarOutlineIcon classes="w-5 h-5" />
+      )}
     </button>
   );
 };

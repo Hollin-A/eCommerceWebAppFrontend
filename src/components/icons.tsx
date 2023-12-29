@@ -16,9 +16,9 @@ export const SearchIcon = () => (
   </svg>
 );
 
-export const StarFilledIcon = () => (
+export const StarFilledIcon = (props: { classes: string }) => (
   <svg
-    className="w-5 h-5 text-blue"
+    className={`text-blue ${props.classes}`}
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
@@ -28,9 +28,9 @@ export const StarFilledIcon = () => (
   </svg>
 );
 
-export const StartOutlineIcon = () => (
+export const StarOutlineIcon = (props: { classes: string }) => (
   <svg
-    className="w-5 h-5 text-blue"
+    className={`text-blue ${props.classes}`}
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -42,6 +42,36 @@ export const StartOutlineIcon = () => (
       strokeLinejoin="round"
       strokeWidth="1"
       d="m11.479 1.712 2.367 4.8a.532.532 0 0 0 .4.292l5.294.769a.534.534 0 0 1 .3.91l-3.83 3.735a.534.534 0 0 0-.154.473l.9 5.272a.535.535 0 0 1-.775.563l-4.734-2.49a.536.536 0 0 0-.5 0l-4.73 2.487a.534.534 0 0 1-.775-.563l.9-5.272a.534.534 0 0 0-.154-.473L2.158 8.48a.534.534 0 0 1 .3-.911l5.294-.77a.532.532 0 0 0 .4-.292l2.367-4.8a.534.534 0 0 1 .96.004Z"
+    />
+  </svg>
+);
+
+export const TrashBinIcon = () => (
+  <svg
+    className="w-4 h-4 text-blue"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    viewBox="0 0 18 20"
+  >
+    <path d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z" />
+  </svg>
+);
+
+export const EditIcon = () => (
+  <svg
+    className="w-4 h-4 text-blue"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 21 21"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M7.418 17.861 1 20l2.139-6.418m4.279 4.279 10.7-10.7a3.027 3.027 0 0 0-2.14-5.165c-.802 0-1.571.319-2.139.886l-10.7 10.7m4.279 4.279-4.279-4.279m2.139 2.14 7.844-7.844m-1.426-2.853 4.279 4.279"
     />
   </svg>
 );
