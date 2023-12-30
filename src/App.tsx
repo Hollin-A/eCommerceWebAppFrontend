@@ -4,6 +4,10 @@ import "./App.css";
 // react router for in-app routing
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+// redux
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+
 // importing layouts
 import RootLayout from "./layouts/RootLayout";
 
@@ -39,7 +43,11 @@ function App(): JSX.Element {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
 
 export default App;

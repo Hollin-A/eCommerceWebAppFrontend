@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 
 import axios from "axios";
 
+// redux
+import { useAppSelector, useAppDispatch } from "../app/hooks";
+import { decrement, increment } from "../features/product/productSlice";
+
 // importing components
 import Title from "../components/Title";
 import SearchBar from "../components/SearchBar";
@@ -34,6 +38,9 @@ const Home = (props: Props) => {
   const [showFavourites, setShowFavourites] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
+
+  const count = useAppSelector((state) => state.product.value);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getProducts = async () => {
@@ -71,6 +78,23 @@ const Home = (props: Props) => {
             showFavourites={showFavourites}
             setShowFavourites={setShowFavourites}
           />
+        </div>
+      </div>
+      <div>
+        <div>
+          <button
+            aria-label="Increment value"
+            onClick={() => dispatch(increment())}
+          >
+            Increment
+          </button>
+          <span>{count}</span>
+          <button
+            aria-label="Decrement value"
+            onClick={() => dispatch(decrement())}
+          >
+            Decrement
+          </button>
         </div>
       </div>
       <div className="mt-10">
