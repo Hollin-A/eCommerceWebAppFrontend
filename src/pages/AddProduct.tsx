@@ -1,11 +1,18 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+// importing components
+import Title from "../components/Title";
+
+type Props = {};
 
 const AddProduct = (props: Props) => {
   return (
-    <div>AddProduct</div>
-  )
-}
+    <section>
+      <div className="">
+        <Title title="products" subTitle="Add new product"/>
+      </div>
+    </section>
+  );
+};
 
-export default AddProduct
+export default AddProduct;
