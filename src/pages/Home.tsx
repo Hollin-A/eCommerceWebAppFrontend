@@ -7,9 +7,10 @@ import Title from "../components/Title";
 import SearchBar from "../components/SearchBar";
 import NewProductBtn from "../components/NewProductBtn";
 import FavouriteBtn from "../components/FavouriteBtn";
+import DeleteProductModal from "../modals/DeleteProductModal";
 
 // importing icons
-import { DeleteIcon, EditIcon } from "../components/icons";
+import { EditIcon } from "../components/icons";
 
 // backend url
 import { BASE_URL } from "../config/apiConfig";
@@ -83,7 +84,10 @@ const Home = (props: Props) => {
         <div className="mt-5 flex flex-col gap-3">
           {products &&
             products.map((item) => (
-              <div className="grid grid-cols-6 gap-2" key={item._id}>
+              <div
+                className="grid grid-cols-6 gap-2 border-b border-grey/50 py-3"
+                key={item._id}
+              >
                 <p className="text-grey">{item.SKU}</p>
                 <div />
                 <p className="text-dark capitalize">{item.name}</p>
@@ -93,7 +97,7 @@ const Home = (props: Props) => {
                   <NavLink className="" to={`/edit-product/${item._id}`}>
                     <EditIcon />
                   </NavLink>
-                  <DeleteIcon />
+                  <DeleteProductModal product={item} />
                 </div>
               </div>
             ))}
