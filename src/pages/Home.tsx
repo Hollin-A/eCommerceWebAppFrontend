@@ -9,7 +9,7 @@ import NewProductBtn from "../components/NewProductBtn";
 import FavouriteBtn from "../components/FavouriteBtn";
 
 // importing icons
-import { TrashBinIcon, EditIcon } from "../components/icons";
+import { DeleteIcon, EditIcon } from "../components/icons";
 
 // backend url
 import { BASE_URL } from "../config/apiConfig";
@@ -90,7 +90,7 @@ const Home = (props: Props) => {
                 <p className="text-dark">{item.unitPrice}</p>
                 <div className="flex w-full justify-end items-center gap-3">
                   <EditIcon />
-                  <TrashBinIcon />
+                  <DeleteIcon />
                 </div>
               </div>
             ))}
