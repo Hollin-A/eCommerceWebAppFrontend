@@ -16,6 +16,7 @@ import { BASE_URL } from "../config/apiConfig";
 
 // importing interfaces
 import { Product } from "../types";
+import { NavLink } from "react-router-dom";
 
 const tableHeaders: string[] = [
   "SKU",
@@ -86,10 +87,12 @@ const Home = (props: Props) => {
                 <p className="text-grey">{item.SKU}</p>
                 <div />
                 <p className="text-dark capitalize">{item.name}</p>
-                <p className="text-dark">{item.quantity}</p>
                 <p className="text-dark">{item.unitPrice}</p>
+                <p className="text-dark">{item.quantity}</p>
                 <div className="flex w-full justify-end items-center gap-3">
-                  <EditIcon />
+                  <NavLink className="" to={`/edit-product/${item._id}`}>
+                    <EditIcon />
+                  </NavLink>
                   <DeleteIcon />
                 </div>
               </div>

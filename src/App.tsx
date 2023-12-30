@@ -32,7 +32,7 @@ function App(): JSX.Element {
           element: <AddProduct />,
         },
         {
-          path: "/edit-product",
+          path: "/edit-product/:id",
           element: <EditProduct />,
         },
       ],
