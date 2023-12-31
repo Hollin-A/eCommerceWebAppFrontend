@@ -132,12 +132,14 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.pending, (state) => {
       state.loading = true;
+      state.error = undefined;
     });
     builder.addCase(
       fetchProducts.fulfilled,
       (state, action: PayloadAction<Array<Product>>) => {
         state.loading = false;
         state.products = action.payload;
+        state.error = undefined;
       }
     );
     builder.addCase(fetchProducts.rejected, (state, action) => {
@@ -147,12 +149,14 @@ export const productSlice = createSlice({
     });
     builder.addCase(addProduct.pending, (state) => {
       state.loading = true;
+      state.error = undefined;
     });
     builder.addCase(
       addProduct.fulfilled,
       (state, action: PayloadAction<Product>) => {
         state.loading = false;
         state.products = [action.payload, ...state.products];
+        state.error = undefined;
       }
     );
     builder.addCase(addProduct.rejected, (state, action) => {
@@ -161,6 +165,7 @@ export const productSlice = createSlice({
     });
     builder.addCase(editProduct.pending, (state) => {
       state.loading = true;
+      state.error = undefined;
     });
     builder.addCase(
       editProduct.fulfilled,
@@ -173,6 +178,7 @@ export const productSlice = createSlice({
           )
           .sort((a, b) => (a.updatedDate > b.updatedDate ? -1 : 1));
         state.products = newState;
+        state.error = undefined;
       }
     );
     builder.addCase(editProduct.rejected, (state, action) => {
@@ -181,6 +187,7 @@ export const productSlice = createSlice({
     });
     builder.addCase(deleteProduct.pending, (state) => {
       state.loading = true;
+      state.error = undefined;
     });
     builder.addCase(
       deleteProduct.fulfilled,
@@ -191,6 +198,7 @@ export const productSlice = createSlice({
           (product) => product._id !== _id
         );
         state.products = OldProducts;
+        state.error = undefined;
       }
     );
     builder.addCase(deleteProduct.rejected, (state, action) => {

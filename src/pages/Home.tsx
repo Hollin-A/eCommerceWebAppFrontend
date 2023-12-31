@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { SpinnerCircular } from "spinners-react";
+
 // redux
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import {
@@ -51,31 +53,6 @@ const Home = (props: Props) => {
     dispatch(fetchProducts());
   }, []);
 
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     setLoading(true);
-  //     const axiosConfig = {
-  //       method: "GET",
-  //       url: `${BASE_URL}products`,
-  //       // headers: {
-  //       //   Authorization: `Bearer ${getAccess()}`,
-  //       // },
-  //     };
-  //     axios(axiosConfig)
-  //       .then((response) => {
-  //         setProducts(response.data.products);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //       });
-  //   };
-
-  //   getProducts();
-  // }, []);
-
   return (
     <section className="">
       <Title title="products" />
@@ -98,7 +75,7 @@ const Home = (props: Props) => {
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
-          {products &&
+          {!loading ? (
             products.map((item) => (
               <div
                 className="grid grid-cols-6 gap-2 border-b border-grey/50 py-3"
@@ -116,7 +93,18 @@ const Home = (props: Props) => {
                   <DeleteProductModal product={item} />
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <div className="w-full flex items-center justify-center">
+              <SpinnerCircular
+                size={50}
+                thickness={180}
+                speed={100}
+                color="rgba(0, 30, 185, 1)"
+                secondaryColor="rgba(0, 0, 0, 0)"
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

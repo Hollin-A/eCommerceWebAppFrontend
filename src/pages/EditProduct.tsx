@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
+import { SpinnerCircular } from "spinners-react";
+
 // redux
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import { editProduct, productSelector } from "../features/product/productSlice";
@@ -159,12 +161,27 @@ const EditProduct = (props: Props) => {
           />
         </div>
       </div>
+      {error && (
+        <div className="w-full border border-grey rounded-lg p-3 mt-5">
+          <p className="text-grey">{error}</p>
+        </div>
+      )}
       <div className="flex items-center justify-end mt-5">
         <button
-          className="bg-blue py-2 w-60 rounded-lg"
+          className="bg-blue py-2 w-60 rounded-lg flex items-center justify-center"
           onClick={handleEditProduct}
         >
-          <p className="text-white capitalize font-semibold">save changes</p>
+          {!loading ? (
+            <p className="text-white capitalize font-semibold">save changes</p>
+          ) : (
+            <SpinnerCircular
+              size={30}
+              thickness={180}
+              speed={100}
+              color="rgba(255, 255, 255, 1)"
+              secondaryColor="rgba(0, 0, 0, 0.01)"
+            />
+          )}
         </button>
       </div>
     </section>
