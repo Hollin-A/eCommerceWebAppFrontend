@@ -5,6 +5,7 @@ export interface Product {
   description: string;
   unitPrice: number;
   quantity: number;
+  favourite: boolean;
   createDate: Date;
   updatedDate: Date;
   __v: number;

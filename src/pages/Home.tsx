@@ -15,6 +15,7 @@ import SearchBar from "../components/SearchBar";
 import NewProductBtn from "../components/NewProductBtn";
 import FavouriteBtn from "../components/FavouriteBtn";
 import DeleteProductModal from "../modals/DeleteProductModal";
+import FavouriteToggleBtn from "../components/FavouriteToggleBtn";
 
 // importing icons
 import { EditIcon } from "../components/icons";
@@ -91,6 +92,10 @@ const Home = (props: Props) => {
                     <EditIcon />
                   </NavLink>
                   <DeleteProductModal product={item} />
+                  <FavouriteToggleBtn
+                    _id={item._id}
+                    favourite={item.favourite}
+                  />
                 </div>
               </div>
             ))
