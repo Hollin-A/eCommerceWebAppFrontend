@@ -6,7 +6,7 @@ type Props = {};
 
 const NewProductBtn = (props: Props) => {
   return (
-    <NavLink to="/add-product">
+    <NavLink to="/add-product" className="h-full">
       <button className="bg-blue rounded-lg p-2 w-40 flex items-center justify-center h-full outline-none">
         <p className="capitalize text-white text-sm font-semibold">
           new product

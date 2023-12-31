@@ -1,13 +1,17 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
-import axios from "axios";
+import { SpinnerCircular } from "spinners-react";
+
+// redux
+import { useAppSelector, useAppDispatch } from "../app/hooks";
+import {
+  deleteProduct,
+  productSelector,
+} from "../features/product/productSlice";
 
 // importing icons
 import { DeleteIcon, AlertIcon } from "../components/icons";
-
-// backend url
-import { BASE_URL } from "../config/apiConfig";
 
 // iterfaces
 import { Product } from "../types";
@@ -19,28 +23,20 @@ interface DeleteProductModalProps {
 const DeleteProductModal = (props: DeleteProductModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const { product } = props;
 
-  const deleteProduct = async () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "DELETE",
-      url: `${BASE_URL}products/${product._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${getAccess()}`,
-      // },
-    };
-    axios(axiosConfig)
-      .then((response) => {
-        console.log(response.data.product);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const selectedProducts = useAppSelector(productSelector);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setLoading(selectedProducts.loading);
+    setError(selectedProducts.error);
+  }, [selectedProducts]);
+
+  const handleDeleteProduct = () => {
+    dispatch(deleteProduct({ _id: product._id }));
   };
 
   function closeModal() {
@@ -99,6 +95,12 @@ const DeleteProductModal = (props: DeleteProductModalProps) => {
                     </p>
                   </div>
 
+                  {error && (
+                    <div className="w-full border border-grey p-3 rounded-lg mt-3">
+                      <p className="text-grey">{error}</p>
+                    </div>
+                  )}
+
                   <div className="mt-4 flex items-center justify-center gap-5">
                     <button
                       type="button"
@@ -109,10 +111,22 @@ const DeleteProductModal = (props: DeleteProductModalProps) => {
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border-2 border-blue bg-blue outline-none px-4 py-2 text-sm text-white hover:bg-blue/75 capitalize font-semibold"
-                      onClick={() => (deleteProduct(), closeModal())}
+                      className="flex justify-center items-center rounded-md border-2 border-blue bg-blue outline-none px-4 py-2 hover:bg-blue/75 hover:border-blue/75"
+                      onClick={() => (handleDeleteProduct(), closeModal())}
                     >
-                      delete
+                      {!loading ? (
+                        <p className=" capitalize font-semibold text-white text-sm">
+                          delete
+                        </p>
+                      ) : (
+                        <SpinnerCircular
+                          size={30}
+                          thickness={180}
+                          speed={100}
+                          color="rgba(255, 255, 255, 1)"
+                          secondaryColor="rgba(0, 0, 0, 0.01)"
+                        />
+                      )}
                     </button>
                   </div>
                 </Dialog.Panel>

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import axios from "axios";
+import { SpinnerCircular } from "spinners-react";
+
+// redux
+import { useAppSelector, useAppDispatch } from "../app/hooks";
+import {
+  fetchProducts,
+  productSelector,
+} from "../features/product/productSlice";
 
 // importing components
 import Title from "../components/Title";
@@ -11,9 +18,6 @@ import DeleteProductModal from "../modals/DeleteProductModal";
 
 // importing icons
 import { EditIcon } from "../components/icons";
-
-// backend url
-import { BASE_URL } from "../config/apiConfig";
 
 // importing interfaces
 import { Product } from "../types";
@@ -34,30 +38,19 @@ const Home = (props: Props) => {
   const [showFavourites, setShowFavourites] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  const selectedProducts = useAppSelector(productSelector);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      const axiosConfig = {
-        method: "GET",
-        url: `${BASE_URL}products`,
-        // headers: {
-        //   Authorization: `Bearer ${getAccess()}`,
-        // },
-      };
-      axios(axiosConfig)
-        .then((response) => {
-          setProducts(response.data.products);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
+    setLoading(selectedProducts.loading);
+    setError(selectedProducts.error);
+    setProducts(selectedProducts.products);
+  }, [selectedProducts]);
 
-    getProducts();
+  useEffect(() => {
+    dispatch(fetchProducts());
   }, []);
 
   return (
@@ -82,7 +75,7 @@ const Home = (props: Props) => {
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
-          {products &&
+          {!loading ? (
             products.map((item) => (
               <div
                 className="grid grid-cols-6 gap-2 border-b border-grey/50 py-3"
@@ -100,7 +93,18 @@ const Home = (props: Props) => {
                   <DeleteProductModal product={item} />
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <div className="w-full flex items-center justify-center">
+              <SpinnerCircular
+                size={50}
+                thickness={180}
+                speed={100}
+                color="rgba(0, 30, 185, 1)"
+                secondaryColor="rgba(0, 0, 0, 0)"
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>
