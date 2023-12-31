@@ -70,6 +70,62 @@ export const addProduct = createAsyncThunk(
   }
 );
 
+export const editProduct = createAsyncThunk(
+  "products/editProduct",
+  (props: {
+    _id: string;
+    SKU: string;
+    name: string;
+    quantity: string;
+    unitPrice: string;
+    description: string;
+  }) => {
+    const { _id, SKU, name, quantity, unitPrice, description } = props;
+
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}products/${_id}`,
+      data: {
+        SKU,
+        name,
+        quantity: Number(quantity),
+        unitPrice: Number(unitPrice),
+        description,
+      },
+    };
+
+    const res = axios(axiosConfig)
+      .then(
+        (response: AxiosResponse<{ product: Product }>) => response.data.product
+      )
+      .catch((err) => {
+        throw err;
+      });
+    return res;
+  }
+);
+
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  (props: { _id: string }) => {
+    const { _id } = props;
+
+    const axiosConfig = {
+      method: "DELETE",
+      url: `${BASE_URL}products/${_id}`,
+    };
+
+    const res = axios(axiosConfig)
+      .then((response: AxiosResponse<{ product: Product }>) => {
+        return response.data.product;
+      })
+      .catch((err) => {
+        throw err;
+      });
+    return res;
+  }
+);
+
 export const productSlice = createSlice({
   name: "products",
   initialState,
@@ -100,6 +156,44 @@ export const productSlice = createSlice({
       }
     );
     builder.addCase(addProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(editProduct.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      editProduct.fulfilled,
+      (state, action: PayloadAction<Product>) => {
+        state.loading = false;
+
+        const newState: Product[] = state.products
+          .map((product) =>
+            product._id === action.payload._id ? action.payload : product
+          )
+          .sort((a, b) => (a.updatedDate > b.updatedDate ? -1 : 1));
+        state.products = newState;
+      }
+    );
+    builder.addCase(editProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(deleteProduct.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      deleteProduct.fulfilled,
+      (state, action: PayloadAction<Product>) => {
+        state.loading = false;
+        const { _id } = action.payload;
+        const OldProducts = state.products.filter(
+          (product) => product._id !== _id
+        );
+        state.products = OldProducts;
+      }
+    );
+    builder.addCase(deleteProduct.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
