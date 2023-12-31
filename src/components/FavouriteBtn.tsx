@@ -15,6 +15,7 @@ const FavouriteBtn = (props: FavouritesBtnProps) => {
     <button
       className="border border-blue rounded-lg aspect-square flex items-center justify-center h-full"
       onClick={() => setShowFavourites((prev) => !prev)}
+      title={showFavourites ? "Show all products" : "Show only Favourites"}
     >
       {showFavourites ? (
         <StarFilledIcon classes="w-5 h-5" />

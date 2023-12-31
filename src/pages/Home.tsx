@@ -56,7 +56,7 @@ const Home = (props: Props) => {
 
   return (
     <section className="">
-      <Title title="products" />
+      <Title title={showFavourites ? "favourite products" : "products"} />
       <div className="flex justify-between items-center h-11">
         <SearchBar searchText={searchText} setSearchText={setSearchText} />
         <div className="flex items-center justify-center gap-3 h-full">
@@ -77,7 +77,10 @@ const Home = (props: Props) => {
         </div>
         <div className="mt-5 flex flex-col gap-3">
           {!loading ? (
-            products.map((item) => (
+            (showFavourites
+              ? products.filter((item: Product) => item.favourite)
+              : products
+            ).map((item: Product) => (
               <div
                 className="grid grid-cols-6 gap-2 border-b border-grey/50 py-3"
                 key={item._id}
