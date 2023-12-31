@@ -1,41 +1,70 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../app/store'
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../../app/store";
 
-// Define a type for the slice state
-interface CounterState {
-  value: number
+import axios, { AxiosResponse } from "axios";
+
+import { BASE_URL } from "../../config/apiConfig";
+
+import { Product } from "../../types";
+
+export interface ProductState {
+  loading: boolean;
+  products: Array<Product>;
+  error: string | undefined;
 }
 
-// Define the initial state using that type
-const initialState: CounterState = {
-  value: 0,
-}
+const initialState: ProductState = {
+  loading: false,
+  products: [],
+  error: undefined,
+};
 
-export const productSlice = createSlice({
-  name: "product",
-  initialState,
-  reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes.
-      // Also, no return statement is required from these functions.
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
-    },
-  },
+export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
+  const axiosConfig = {
+    method: "GET",
+    url: `${BASE_URL}products`,
+    // headers: {
+    //   Authorization: `Bearer ${getAccess()}`,
+    // },
+  };
+
+  const res = axios(axiosConfig)
+    .then(
+      (response: AxiosResponse<{ products: Product[] }>) =>
+        response.data.products
+    )
+    .catch((err) => {
+      throw err;
+    });
+  return res;
 });
 
-export const { increment, decrement, incrementByAmount } = productSlice.actions
+export const productSlice = createSlice({
+  name: "products",
+  initialState,
+  extraReducers: (builder) => {
+    builder.addCase(fetchProducts.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      fetchProducts.fulfilled,
+      (state, action: PayloadAction<Array<Product>>) => {
+        state.loading = false;
+        state.products = action.payload;
+      }
+    );
+    builder.addCase(fetchProducts.rejected, (state, action) => {
+      state.loading = false;
+      state.products = [];
+      state.error = action.error.message;
+    });
+  },
+  reducers: {},
+});
+
+// export const { addProduct } = productSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.product.value
+export const productSelector = (state: RootState) => state.productReducer;
 
-export default productSlice.reducer
+export default productSlice.reducer;

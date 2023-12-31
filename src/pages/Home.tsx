@@ -4,7 +4,10 @@ import axios from "axios";
 
 // redux
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { decrement, increment } from "../features/product/productSlice";
+import {
+  fetchProducts,
+  productSelector,
+} from "../features/product/productSlice";
 
 // importing components
 import Title from "../components/Title";
@@ -38,34 +41,45 @@ const Home = (props: Props) => {
   const [showFavourites, setShowFavourites] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState<string | undefined>(undefined);
 
-  const count = useAppSelector((state) => state.product.value);
+  const selectedProducts = useAppSelector(productSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      const axiosConfig = {
-        method: "GET",
-        url: `${BASE_URL}products`,
-        // headers: {
-        //   Authorization: `Bearer ${getAccess()}`,
-        // },
-      };
-      axios(axiosConfig)
-        .then((response) => {
-          setProducts(response.data.products);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
+    setLoading(selectedProducts.loading);
+    setError(selectedProducts.error);
+    setProducts(selectedProducts.products);
+  }, [selectedProducts]);
 
-    getProducts();
+  useEffect(() => {
+    dispatch(fetchProducts());
   }, []);
+
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     setLoading(true);
+  //     const axiosConfig = {
+  //       method: "GET",
+  //       url: `${BASE_URL}products`,
+  //       // headers: {
+  //       //   Authorization: `Bearer ${getAccess()}`,
+  //       // },
+  //     };
+  //     axios(axiosConfig)
+  //       .then((response) => {
+  //         setProducts(response.data.products);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       })
+  //       .finally(() => {
+  //         setLoading(false);
+  //       });
+  //   };
+
+  //   getProducts();
+  // }, []);
 
   return (
     <section className="">
@@ -78,23 +92,6 @@ const Home = (props: Props) => {
             showFavourites={showFavourites}
             setShowFavourites={setShowFavourites}
           />
-        </div>
-      </div>
-      <div>
-        <div>
-          <button
-            aria-label="Increment value"
-            onClick={() => dispatch(increment())}
-          >
-            Increment
-          </button>
-          <span>{count}</span>
-          <button
-            aria-label="Decrement value"
-            onClick={() => dispatch(decrement())}
-          >
-            Decrement
-          </button>
         </div>
       </div>
       <div className="mt-10">
