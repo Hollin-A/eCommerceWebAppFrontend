@@ -23,9 +23,6 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
   const axiosConfig = {
     method: "GET",
     url: `${BASE_URL}products`,
-    // headers: {
-    //   Authorization: `Bearer ${getAccess()}`,
-    // },
   };
 
   const res = axios(axiosConfig)
@@ -38,6 +35,40 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
     });
   return res;
 });
+
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  (props: {
+    SKU: string;
+    name: string;
+    quantity: string;
+    unitPrice: string;
+    description: string;
+  }) => {
+    const { SKU, name, quantity, unitPrice, description } = props;
+
+    const axiosConfig = {
+      method: "POST",
+      url: `${BASE_URL}products`,
+      data: {
+        SKU,
+        name,
+        quantity: Number(quantity),
+        unitPrice: Number(unitPrice),
+        description,
+      },
+    };
+
+    const res = axios(axiosConfig)
+      .then(
+        (response: AxiosResponse<{ product: Product }>) => response.data.product
+      )
+      .catch((err) => {
+        throw err;
+      });
+    return res;
+  }
+);
 
 export const productSlice = createSlice({
   name: "products",
@@ -58,13 +89,24 @@ export const productSlice = createSlice({
       state.products = [];
       state.error = action.error.message;
     });
+    builder.addCase(addProduct.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      addProduct.fulfilled,
+      (state, action: PayloadAction<Product>) => {
+        state.loading = false;
+        state.products = [action.payload, ...state.products];
+      }
+    );
+    builder.addCase(addProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
   reducers: {},
 });
 
-// export const { addProduct } = productSlice.actions;
-
-// Other code such as selectors can use the imported `RootState` type
 export const productSelector = (state: RootState) => state.productReducer;
 
 export default productSlice.reducer;

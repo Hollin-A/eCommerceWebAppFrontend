@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import axios from "axios";
-
 // redux
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import {
@@ -18,9 +16,6 @@ import DeleteProductModal from "../modals/DeleteProductModal";
 
 // importing icons
 import { EditIcon } from "../components/icons";
-
-// backend url
-import { BASE_URL } from "../config/apiConfig";
 
 // importing interfaces
 import { Product } from "../types";
