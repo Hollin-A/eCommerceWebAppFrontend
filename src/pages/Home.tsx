@@ -15,6 +15,7 @@ import SearchBar from "../components/SearchBar";
 import NewProductBtn from "../components/NewProductBtn";
 import FavouriteBtn from "../components/FavouriteBtn";
 import DeleteProductModal from "../modals/DeleteProductModal";
+import FavouriteToggleBtn from "../components/FavouriteToggleBtn";
 
 // importing icons
 import { EditIcon } from "../components/icons";
@@ -60,10 +61,7 @@ const Home = (props: Props) => {
         <SearchBar searchText={searchText} setSearchText={setSearchText} />
         <div className="flex items-center justify-center gap-3 h-full">
           <NewProductBtn />
-          <FavouriteBtn
-            showFavourites={showFavourites}
-            setShowFavourites={setShowFavourites}
-          />
+          <FavouriteBtn />
         </div>
       </div>
       <div className="mt-10">
@@ -76,7 +74,7 @@ const Home = (props: Props) => {
         </div>
         <div className="mt-5 flex flex-col gap-3">
           {!loading ? (
-            products.map((item) => (
+            products.map((item: Product) => (
               <div
                 className="grid grid-cols-6 gap-2 border-b border-grey/50 py-3"
                 key={item._id}
@@ -91,6 +89,10 @@ const Home = (props: Props) => {
                     <EditIcon />
                   </NavLink>
                   <DeleteProductModal product={item} />
+                  <FavouriteToggleBtn
+                    _id={item._id}
+                    favourite={item.favourite}
+                  />
                 </div>
               </div>
             ))

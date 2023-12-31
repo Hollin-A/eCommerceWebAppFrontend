@@ -1,27 +1,18 @@
 import React from "react";
 
+import { NavLink } from "react-router-dom";
+
 // imporitng icons
 import { StarFilledIcon, StarOutlineIcon } from "./icons";
 
-interface FavouritesBtnProps {
-  showFavourites: boolean;
-  setShowFavourites: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const FavouriteBtn = (props: FavouritesBtnProps) => {
-  const { showFavourites, setShowFavourites } = props;
-
+const FavouriteBtn = () => {
   return (
-    <button
+    <NavLink
       className="border border-blue rounded-lg aspect-square flex items-center justify-center h-full"
-      onClick={() => setShowFavourites((prev) => !prev)}
+      to={`/favourites`}
     >
-      {showFavourites ? (
-        <StarFilledIcon classes="w-5 h-5" />
-      ) : (
-        <StarOutlineIcon classes="w-5 h-5" />
-      )}
-    </button>
+      <StarFilledIcon classes="w-5 h-5" />
+    </NavLink>
   );
 };
 

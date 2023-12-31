@@ -36,6 +36,23 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
   return res;
 });
 
+export const fetchFavouriteProducts = createAsyncThunk("products/fetchFavouriteProducts", () => {
+  const axiosConfig = {
+    method: "GET",
+    url: `${BASE_URL}products/favourites`,
+  };
+
+  const res = axios(axiosConfig)
+    .then(
+      (response: AxiosResponse<{ products: Product[] }>) =>
+        response.data.products
+    )
+    .catch((err) => {
+      throw err;
+    });
+  return res;
+});
+
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   (props: {
@@ -92,6 +109,27 @@ export const editProduct = createAsyncThunk(
         unitPrice: Number(unitPrice),
         description,
       },
+    };
+
+    const res = axios(axiosConfig)
+      .then(
+        (response: AxiosResponse<{ product: Product }>) => response.data.product
+      )
+      .catch((err) => {
+        throw err;
+      });
+    return res;
+  }
+);
+
+export const toggleProductFavourite = createAsyncThunk(
+  "products/toggleproductFavourite",
+  (props: { _id: string }) => {
+    const { _id } = props;
+
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}products/favourite/${_id}`,
     };
 
     const res = axios(axiosConfig)
@@ -182,6 +220,28 @@ export const productSlice = createSlice({
       }
     );
     builder.addCase(editProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(toggleProductFavourite.pending, (state) => {
+      state.loading = true;
+      state.error = undefined;
+    });
+    builder.addCase(
+      toggleProductFavourite.fulfilled,
+      (state, action: PayloadAction<Product>) => {
+        state.loading = false;
+
+        const newState: Product[] = state.products
+          .map((product) =>
+            product._id === action.payload._id ? action.payload : product
+          )
+          .sort((a, b) => (a.updatedDate > b.updatedDate ? -1 : 1));
+        state.products = newState;
+        state.error = undefined;
+      }
+    );
+    builder.addCase(toggleProductFavourite.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
