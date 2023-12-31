@@ -36,6 +36,23 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
   return res;
 });
 
+export const fetchFavouriteProducts = createAsyncThunk("products/fetchFavouriteProducts", () => {
+  const axiosConfig = {
+    method: "GET",
+    url: `${BASE_URL}products/favourites`,
+  };
+
+  const res = axios(axiosConfig)
+    .then(
+      (response: AxiosResponse<{ products: Product[] }>) =>
+        response.data.products
+    )
+    .catch((err) => {
+      throw err;
+    });
+  return res;
+});
+
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   (props: {
