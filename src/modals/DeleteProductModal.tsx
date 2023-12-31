@@ -95,7 +95,7 @@ const DeleteProductModal = (props: DeleteProductModalProps) => {
                     </p>
                   </div>
 
-                  {!error && (
+                  {error && (
                     <div className="w-full border border-grey p-3 rounded-lg mt-3">
                       <p className="text-grey">{error}</p>
                     </div>
